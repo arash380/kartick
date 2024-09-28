@@ -84,12 +84,13 @@ const Lobby = () => {
         .find((r) => r.number === newLobby.currentRound)
         .results.filter((result) => result.correct);
 
-      correctPlayers.forEach((player) => {
-        updateDoc(doc(lobbiesCollection, lobbyId), {
-          players: lobby.players.map((p) => {
-            return p.id === player.id ? { ...p, score: p.score + 1 } : p;
-          }),
-        });
+      const updatedPlayers = lobby.players.map((player) => {
+        const correctPlayer = correctPlayers.find((p) => p.id === player.id);
+        return correctPlayer ? { ...player, score: player.score + 1 } : player;
+      });
+
+      await updateDoc(doc(lobbiesCollection, lobbyId), {
+        players: updatedPlayers,
       });
 
       const cars = await getRandomCars(5);
@@ -150,9 +151,13 @@ const Lobby = () => {
           {gameStarted ? (
             <p className={classes.roundInfo}>Round: {lobby?.currentRound}</p>
           ) : lobby.players.find(({ isHost }) => isHost).id === playerId ? (
-            <button className={classes.startButton} onClick={startGame}>
-              Start Game
-            </button>
+            lobby.players.length > 1 ? (
+              <button className={classes.startButton} onClick={startGame}>
+                Start Game
+              </button>
+            ) : (
+              <p className={classes.waitMessage}>Waiting for more players</p>
+            )
           ) : (
             <p className={classes.waitMessage}>Waiting for host to start the game</p>
           )}
@@ -172,8 +177,15 @@ const Lobby = () => {
 
           {lobby.currentRound > 1 && (
             <div className={classes.correctAnswer}>
-              The correct answer was{" "}
-              {lobby.rounds.find(({ number }) => number === lobby.currentRound - 1)?.correctAnswer?.name}
+              The correct answer for previous round was:
+              <br />
+              <img
+                src={
+                  lobby.rounds.find(({ number }) => number === lobby.currentRound - 1)?.correctAnswer?.image
+                }
+                className={classes.carImage}
+                alt="car"
+              />
             </div>
           )}
         </section>

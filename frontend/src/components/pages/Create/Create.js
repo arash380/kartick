@@ -49,6 +49,7 @@ const Create = () => {
 
         <form onSubmit={onCreate}>
           <label htmlFor="playerName">Player Name</label>
+          <br />
           <input
             type="text"
             id="playerName"

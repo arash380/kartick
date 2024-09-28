@@ -116,23 +116,6 @@ const Lobby = () => {
 
   return (
     lobby && (
-      // {gameStarted && !hasPlayerGuessed() && (
-      //   <>
-      //     <h3>Which one is `{findCurrentRound().correctAnswer.name}`</h3>
-      //     <div>
-      //       {findCurrentRound()?.options.map((car, i) => (
-      //         <div key={i} onClick={() => guess(car.name)}>
-      //           <img src={car.image} alt="car" />
-      //         </div>
-      //       ))}
-      //     </div>
-      //   </>
-      // )}
-
-      // {lobby.currentRound > 1 && (
-      //   <div>
-      //     The correct answer was{" "}
-      //     {lobby.rounds.find(({ number }) => number === lobby.currentRound - 1)?.correctAnswer?.name}
       <div className={classes.container}>
         <Link className={classes.header} to={rc.default}>
           Kartick
@@ -176,7 +159,7 @@ const Lobby = () => {
 
           {gameStarted && !hasPlayerGuessed() && (
             <div className={classes.guessSection}>
-              <h3>Choose your guess</h3>
+              <h3>Which one is `{findCurrentRound().correctAnswer.name}`</h3>
               <div className={classes.carsContainer}>
                 {findCurrentRound()?.options.map((car, i) => (
                   <div key={i} className={classes.carOption} onClick={() => guess(car.name)}>

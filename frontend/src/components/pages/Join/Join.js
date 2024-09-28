@@ -3,8 +3,17 @@ import classes from "./Join.module.css";
 import { useNavigate, Link } from "react-router-dom";
 import rc from "../../routing/routeConfigs";
 import logo from "../../../assets/images/logo.png";
-import { addDoc, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
+import {
+  addDoc,
+  arrayUnion,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
+import {
+  lobbiesCollection,
+  playersCollection,
+} from "../../../firebase/firebase";
 import { toast } from "react-toastify";
 
 const Join = () => {
@@ -66,21 +75,25 @@ const Join = () => {
           <img src={logo} alt="Logo" className={classes.logo} />
 
           <form onSubmit={onJoin}>
-            <label htmlFor="lobbyCode">Lobby Code</label>
-            <input
-              type="text"
-              id="lobbyCode"
-              value={lobbyCode}
-              onChange={(e) => setLobbyCode(e.target.value)}
-            />
+            <div className={classes.inputContainer}>
+              <label htmlFor="lobbyCode">Lobby Code</label>
+              <input
+                type="text"
+                id="lobbyCode"
+                value={lobbyCode}
+                onChange={(e) => setLobbyCode(e.target.value)}
+              />
+            </div>
 
-            <label htmlFor="playerName">Player Name</label>
-            <input
-              type="text"
-              id="playerName"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-            />
+            <div className="inputContainer">
+              <label htmlFor="playerName">Player Name</label>
+              <input
+                type="text"
+                id="playerName"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+              />
+            </div>
 
             <button disabled={isJoinDisabled} type="submit">
               Join Lobby

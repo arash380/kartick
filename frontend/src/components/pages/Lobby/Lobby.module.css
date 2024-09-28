@@ -1,0 +1,144 @@
+.header {
+  width: 100%;
+  text-align: center;
+  font-weight: 1000;
+  font-size: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 2.2rem;
+  color: #333;
+}
+
+.lobbyInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #555;
+}
+
+.lobbyInfo p {
+  margin: 0 10px;
+}
+
+.playersSection {
+  margin-bottom: 20px;
+}
+
+.playersSection h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.playerList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.playerItem {
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+}
+
+.gameSection {
+  margin-bottom: 20px;
+}
+
+.roundInfo {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.startButton {
+  padding: 12px 24px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.startButton:hover {
+  background-color: #45a049;
+}
+
+.waitMessage {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.guessSection {
+  margin-top: 20px;
+}
+
+.carsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.carOption {
+  cursor: pointer;
+}
+
+.carImage {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.carImage:hover {
+  transform: scale(1.05);
+}
+
+.correctAnswer {
+  margin-top: 20px;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+@media (max-width: 600px) {
+  .lobbyInfo {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .carsContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .carImage {
+    width: 100%;
+    height: auto;
+  }
+
+  .startButton {
+    width: 100%;
+  }
+}

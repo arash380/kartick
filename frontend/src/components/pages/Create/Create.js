@@ -2,28 +2,41 @@ import React, { useState } from "react";
 import classes from "./Create.module.css";
 import logo from "../../../assets/images/logo.png";
 import { addDoc } from "firebase/firestore";
-import { lobbiesCollection } from "../../../firebase/firebase";
-import { useNavigate } from "react-router-dom";
 import rc from "../../routing/routeConfigs";
+import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
-  const navigate = useNavigate();
   const [playerName, setPlayerName] = useState("");
+  const navigate = useNavigate();
 
   const isCreateDisabled = playerName.trim() === "";
 
   const onCreate = async (event) => {
     event.preventDefault();
 
-    const ref = await addDoc(lobbiesCollection, {
-      startedAt: new Date(),
-      active: true,
-      round: 0, // game has not started yet?
-      players: [],
-      code: "",
+    const playerRef = await addDoc(playersCollection, {
+      name: playerName,
     });
 
-    console.log(ref.id);
+    const lobbyRef = await addDoc(lobbiesCollection, {
+      startedAt: new Date(),
+      active: true,
+      round: { number: 0, active: false }, // game has not started yet?
+      players: [
+        {
+          id: playerRef.id,
+          name: playerName,
+          score: 0,
+          isHost: true,
+        },
+      ],
+      code: Math.random().toString(36).substring(2, 8),
+    });
+
+    setPlayerName("");
+
+    navigate(`/lobby/${lobbyRef.id}/player/${playerRef.id}`);
   };
 
   return (

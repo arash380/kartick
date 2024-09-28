@@ -36,15 +36,21 @@ const Lobby = () => {
         }
       });
     }
-
-    // if (lobby && !Object.values(lobby.players).includes(playerId)) navigate(rc.default);
   }, [playerId, navigate]);
 
   return (
     lobby && (
       <div className={classes.root}>
-        <p>{lobbyId}</p>
-        <p>{playerId}</p>
+        <p>Room id: {lobbyId}</p>
+
+        <p>Players:</p>
+        <ul>
+          {lobby.players.map((player) => (
+            <li key={player.id}>{player.name}</li>
+          ))}
+        </ul>
+
+        <p>Current Player: {playerId}</p>
       </div>
     )
   );

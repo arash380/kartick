@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import classes from "./Join.module.css";
-import logo from "../../../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
+import rc from "../../routing/routeConfigs";
+import logo from "../../../assets/images/logo.png";
 import { addDoc, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
 import { toast } from "react-toastify";
@@ -58,30 +59,33 @@ const Join = () => {
 
   return (
     lobbies && (
-      <div className={classes.centered}>
-        <img src={logo} alt="Logo" className={classes.logo} />
+      <div className={classes.root}>
+        <a className={classes.header} onClick={() => navigate(rc.default  )}>Kartick.io</a>
+        <div className={classes.centered}>
+          <img src={logo} alt="Logo" className={classes.logo} />
 
-        <form onSubmit={onJoin}>
-          <label htmlFor="lobbyCode">Lobby Code</label>
-          <input
-            type="text"
-            id="lobbyCode"
-            value={lobbyCode}
-            onChange={(e) => setLobbyCode(e.target.value)}
-          />
+          <form onSubmit={onJoin}>
+            <label htmlFor="lobbyCode">Lobby Code</label>
+            <input
+              type="text"
+              id="lobbyCode"
+              value={lobbyCode}
+              onChange={(e) => setLobbyCode(e.target.value)}
+            />
 
-          <label htmlFor="playerName">Player Name</label>
-          <input
-            type="text"
-            id="playerName"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-          />
+            <label htmlFor="playerName">Player Name</label>
+            <input
+              type="text"
+              id="playerName"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+            />
 
-          <button disabled={isJoinDisabled} type="submit">
-            Join Lobby
-          </button>
-        </form>
+            <button disabled={isJoinDisabled} type="submit">
+              Join Lobby
+            </button>
+          </form>
+        </div>
       </div>
     )
   );

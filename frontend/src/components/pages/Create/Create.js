@@ -21,14 +21,13 @@ const Create = () => {
 
     const lobbyRef = await addDoc(lobbiesCollection, {
       startedAt: new Date(),
-      round: { number: 0, active: false }, // game has not started yet?
+      currentRoad: 0,
       players: [
         {
           id: playerRef.id,
           name: playerName,
           score: 0,
           isHost: true,
-          currentTurn: true,
         },
       ],
       code: Math.random().toString(36).substring(2, 8),
@@ -42,7 +41,9 @@ const Create = () => {
 
   return (
     <div className={classes.roots}>
-      <a className={classes.header} onClick={() => navigate(rc.default)}>Kartick.io</a>
+      <a className={classes.header} onClick={() => navigate(rc.default)}>
+        Kartick.io
+      </a>
       <div className={classes.centered}>
         <img src={logo} alt="Logo" className={classes.logo} />
 

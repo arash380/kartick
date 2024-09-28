@@ -47,7 +47,6 @@ const Join = () => {
         name: playerName,
         score: 0,
         isHost: false,
-        currentTurn: false,
       }),
     });
 
@@ -60,7 +59,9 @@ const Join = () => {
   return (
     lobbies && (
       <div className={classes.root}>
-        <a className={classes.header} onClick={() => navigate(rc.default  )}>Kartick.io</a>
+        <a className={classes.header} onClick={() => navigate(rc.default)}>
+          Kartick.io
+        </a>
         <div className={classes.centered}>
           <img src={logo} alt="Logo" className={classes.logo} />
 

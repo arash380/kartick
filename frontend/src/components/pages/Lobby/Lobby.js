@@ -4,16 +4,14 @@ import classes from "./Lobby.module.css";
 import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import rc from "../../routing/routeConfigs";
+import { getRandomCars } from "../../../services/api/cars";
 
 const Lobby = () => {
   const { lobbyId, playerId } = useParams();
   const navigate = useNavigate();
   const [lobby, setLobby] = useState();
 
-  const roundStarted = lobby?.round?.number > 0;
-  const roundActive = lobby?.round?.active;
-  const isTheirTurn = lobby?.players.find(({ id }) => id === playerId)?.currentTurn;
-  const currentTurn = lobby?.players.find(({ currentTurn }) => currentTurn);
+  const gameStarted = lobby?.currentRound > 0;
 
   useEffect(() => {
     let unsubscribe = () => {};
@@ -44,57 +42,64 @@ const Lobby = () => {
   }, [playerId, navigate]);
 
   const startGame = async () => {
+    const cars = await getRandomCars(2, 2022, true);
+
     updateDoc(doc(lobbiesCollection, lobbyId), {
-      round: { number: 1, active: false },
+      currentRound: 1,
       rounds: lobby.rounds.push({
         number: 1,
 
-        // player guesses is an array of objects with the player id and the car they guessed
         playerGuseses: lobby.players.map((player) => ({ id: player.id, guess: null })),
 
-        // TODO: info about the options and the right answer
+        correctAnswer: cars[Math.floor(Math.random() * cars.length)],
+        options: cars,
       }),
     });
   };
 
-  const chooseRoundCar = async () => {
-    updateDoc(doc(lobbiesCollection, lobbyId), {
-      round: { number: lobby.round.number, active: true },
-
-      // update rounds
-    });
-
-    // TODO: Implement the logic to choose the car (add fields? / make a rounds collection?)
+  const guess = async () => {
+    // updateDoc(doc(lobbiesCollection, lobbyId), {
+    //   rounds: lobby.rounds.map((round) => {
+    //     if (round.number === lobby.round.number) {
+    //       return {
+    //         ...round,
+    //         playerGuseses: round.playerGuseses.map((guess) => {
+    //           if (guess.id === playerId) {
+    //             return { ...guess, guess: "car" };
+    //           }
+    //           return guess;
+    //         }),
+    //       };
+    //     }
+    //     return round;
+    //   }),
+    // });
+    // // todo: check if all players have guessed
+    // const everyoneGussed = lobby.rounds.find((round) => round.number === lobby.round.number).playerGuseses.every((guess) => guess.guess);
+    // if (everyoneGussed) {
+    //   //
+    // }
   };
 
-  const guessCar = async () => {
-    updateDoc(doc(lobbiesCollection, lobbyId), {
-      rounds: lobby.rounds.map((round) => {
-        if (round.number === lobby.round.number) {
-          return {
-            ...round,
-            playerGuseses: round.playerGuseses.map((guess) => {
-              if (guess.id === playerId) {
-                return { ...guess, guess: "car" };
-              }
-              return guess;
-            }),
-          };
-        }
-        return round;
-      }),
-    });
+  const findCurrentRound = () => {
+    return lobby.rounds.find((round) => round.number === lobby.currentRound);
+  };
+
+  const hasPlayerGuessed = () => {
+    return findCurrentRound().playerGuseses.find((guess) => guess.id === playerId).guess;
   };
 
   return (
     lobby && (
       <div className={classes.root}>
         <h1>Lobby</h1>
-        {roundStarted ? (
+        {gameStarted ? (
           <p>Round: {lobby?.round?.number}</p>
         ) : lobby.players.find(({ isHost }) => isHost).id === playerId ? (
           <button onClick={startGame}>Start Game</button>
-        ) : null}
+        ) : (
+          <p>Waiting for host to start the game</p>
+        )}
 
         <p>Players:</p>
         <ul>
@@ -105,18 +110,16 @@ const Lobby = () => {
 
         <p>Current Player: {lobby.players.find(({ id }) => id === playerId)?.name}</p>
         <p>Host player: {lobby.players.find(({ isHost }) => isHost)?.name}</p>
-        <p>Current Turn: {currentTurn?.name}</p>
         <p>Lobby Code: {lobby.code}</p>
 
-        {/* The player that is choosing the car) */}
-        {roundStarted && !roundActive && isTheirTurn && (
-          <button onClick={chooseRoundCar}>Choose your car</button>
-        )}
-        {roundStarted && roundActive && isTheirTurn && <div>Waiting for other players to get the answer</div>}
+        {gameStarted && !hasPlayerGuessed && <button onClick={guess}>Choose your car</button>}
 
-        {/* Players playing (not the one who choose the car) */}
-        {roundStarted && !roundActive && !isTheirTurn && <div>Waiting for {currentTurn?.name}</div>}
-        {roundStarted && roundActive && !isTheirTurn && <button onClick={guessCar}>Find the car</button>}
+        {lobby.currentRound > 1 && (
+          <div>
+            The correct answer was{" "}
+            {lobby.rounds.find(({ number }) => number === lobby.currentRound - 1)?.correctAnswer?.name}
+          </div>
+        )}
       </div>
     )
   );

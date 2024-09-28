@@ -1,10 +1,14 @@
 const express = require("express");
 const axios = require("axios");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 dotenv.config();
 
 const app = express();
+
+app.use(express.json());
+app.use(cors());
 
 const CARQUERY_BASE_URL = "https://www.carqueryapi.com/api/0.3/";
 const UNSPLASH_BASE_URL = "https://api.unsplash.com/search/photos";

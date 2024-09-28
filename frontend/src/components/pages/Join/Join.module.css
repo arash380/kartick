@@ -1,12 +1,18 @@
 .centered {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100vh;
-  gap: 10px;
+  text-align: center;
+  padding: 20px;
 }
 
+.logo {
+  width: 40vh;
+  max-width: 300px;
+  margin-bottom: 15px;
+}
 label {
   font-size: 16px;
   margin-bottom: 5px;

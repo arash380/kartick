@@ -1,32 +1,37 @@
 .centered {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100vh;
-  gap: 10px;
+  text-align: center;
+  padding: 20px; /* Added padding for better spacing */
 }
 
-label {
-  font-size: 16px;
-  margin-bottom: 5px;
+.logo {
+  width: 40vh;
+  max-width: 300px;
+  margin-bottom: 15px;
 }
 
 input,
 button {
-  width: 200px;
+  width: 100%; /* Made inputs and buttons take full width */
+  max-width: 300px; /* Set a max-width for better layout */
   padding: 10px;
   font-size: 16px;
+  margin-bottom: 15px; /* Added consistent spacing between elements */
 }
 
 input {
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-bottom: 10px;
+  transition: border-color 0.3s; /* Smooth transition for focus state */
 }
 
 input:focus {
   border-color: #007bff;
+  outline: none; /* Remove default outline */
 }
 
 button {
@@ -35,9 +40,18 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition for hover */
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3; /* Darker blue on hover */
 }
 
 button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+label {
+  margin-top: 2rem;
 }

@@ -12,11 +12,15 @@ const Create = () => {
   const onCreate = async (event) => {
     event.preventDefault();
 
-    await addDoc(lobbiesCollection, {
+    const ref = await addDoc(lobbiesCollection, {
       startedAt: new Date(),
       active: true,
       round: 0, // game has not started yet?
+      players: [],
+      code: "",
     });
+
+    console.log(ref.id);
   };
 
   return (

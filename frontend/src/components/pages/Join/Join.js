@@ -41,7 +41,7 @@ const Join = () => {
       name: playerName,
     });
 
-    updateDoc(doc(lobbiesCollection, lobby.id), {
+    await updateDoc(doc(lobbiesCollection, lobby.id), {
       players: arrayUnion({
         id: playerRef.id,
         name: playerName,

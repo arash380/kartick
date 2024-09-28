@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import classes from "./Lobby.module.css";
 import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
-import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import rc from "../../routing/routeConfigs";
 import { getRandomCars } from "../../../services/api/cars";
 
@@ -42,45 +42,68 @@ const Lobby = () => {
   }, [playerId, navigate]);
 
   const startGame = async () => {
-    const cars = await getRandomCars(5, 2022, true);
+    const cars = await getRandomCars(5);
 
-    updateDoc(doc(lobbiesCollection, lobbyId), {
+    await updateDoc(doc(lobbiesCollection, lobbyId), {
       currentRound: 1,
-      rounds: [
-        ...lobby.rounds,
-        {
-          number: 1,
-          guesses: lobby.players.map((player) => ({ id: player.id, guess: null })),
-          correctAnswer: cars[Math.floor(Math.random() * cars.length)],
-          options: cars,
-        },
-      ],
+      rounds: arrayUnion({
+        number: 1,
+        results: lobby.players.map((player) => ({ id: player.id, correct: null })),
+        correctAnswer: cars[Math.floor(Math.random() * cars.length)],
+        options: cars,
+      }),
     });
   };
 
   const guess = async (name) => {
-    updateDoc(doc(lobbiesCollection, lobbyId), {
+    const newLobby = {
+      ...lobby,
       rounds: lobby.rounds.map((round) => {
         if (round.number === lobby.currentRound) {
           return {
             ...round,
-            guesses: round.guesses.map((guess) => {
-              if (guess.id === playerId) {
-                return { ...guess, guess: name };
-              }
-              return guess;
+            results: round.results.map((result) => {
+              return result.id === playerId
+                ? { ...result, correct: name === round.correctAnswer.name }
+                : result;
             }),
           };
         }
         return round;
       }),
-    });
+    };
 
-    // // todo: check if all players have guessed
-    // const everyoneGussed = lobby.rounds.find((round) => round.number === lobby.round.number).guesses.every((guess) => guess.guess);
-    // if (everyoneGussed) {
-    //   //
-    // }
+    await updateDoc(doc(lobbiesCollection, lobbyId), newLobby);
+
+    const allGuessed = findCurrentRound()
+      .results.filter((result) => result.id !== playerId)
+      .every((result) => result.correct !== null);
+
+    if (allGuessed) {
+      const correctPlayers = newLobby.rounds
+        .find((r) => r.number === newLobby.currentRound)
+        .results.filter((result) => result.correct);
+
+      correctPlayers.forEach((player) => {
+        updateDoc(doc(lobbiesCollection, lobbyId), {
+          players: lobby.players.map((p) => {
+            return p.id === player.id ? { ...p, score: p.score + 1 } : p;
+          }),
+        });
+      });
+
+      const cars = await getRandomCars(5);
+
+      await updateDoc(doc(lobbiesCollection, lobbyId), {
+        currentRound: lobby.currentRound + 1,
+        rounds: arrayUnion({
+          number: lobby.currentRound + 1,
+          results: lobby.players.map((player) => ({ id: player.id, correct: null })),
+          correctAnswer: cars[Math.floor(Math.random() * cars.length)],
+          options: cars,
+        }),
+      });
+    }
   };
 
   const findCurrentRound = () => {
@@ -88,7 +111,7 @@ const Lobby = () => {
   };
 
   const hasPlayerGuessed = () => {
-    return findCurrentRound()?.guesses?.find((guess) => guess.id === playerId)?.guess;
+    return findCurrentRound()?.results?.find((result) => result.id === playerId)?.correct !== null;
   };
 
   return (
@@ -106,7 +129,9 @@ const Lobby = () => {
         <p>Players:</p>
         <ul>
           {lobby.players.map((player) => (
-            <li key={player.id}>{player.name}</li>
+            <li key={player.id}>
+              {player.name}: {player.score}
+            </li>
           ))}
         </ul>
 
@@ -116,7 +141,7 @@ const Lobby = () => {
 
         {gameStarted && !hasPlayerGuessed() && (
           <>
-            <h3>Guess</h3>
+            <h3>Which one is `{findCurrentRound().correctAnswer.name}`</h3>
             <div>
               {findCurrentRound()?.options.map((car, i) => (
                 <div key={i} onClick={() => guess(car.name)}>

@@ -1,11 +1,14 @@
 .header {
+  display: flex;
+  justify-content: left;
   width: 100%;
   text-align: center;
   font-weight: 1000;
   font-size: 20px;
+  margin: 10px;
   cursor: pointer;
-  text-decoration: none;
   color: black;
+  text-decoration: none;
 }
 
 .container {
@@ -15,12 +18,12 @@
   font-family: Arial, sans-serif;
 }
 
-.header {
+.main {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.header h1 {
+.main h1 {
   font-size: 2.2rem;
   color: #333;
 }
@@ -34,6 +37,18 @@
 
 .lobbyInfo p {
   margin: 0 10px;
+}
+
+.lobbyCode {
+  background-color: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.lobbyCode:hover {
+  background-color: #e0e0e0;
 }
 
 .playersSection {

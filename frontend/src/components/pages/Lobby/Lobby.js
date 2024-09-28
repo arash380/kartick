@@ -5,6 +5,8 @@ import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firesto
 import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
 import rc from "../../routing/routeConfigs";
 import { getRandomCars } from "../../../services/api/cars";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Lobby = () => {
   const { lobbyId, playerId } = useParams();
@@ -48,7 +50,10 @@ const Lobby = () => {
       currentRound: 1,
       rounds: arrayUnion({
         number: 1,
-        results: lobby.players.map((player) => ({ id: player.id, correct: null })),
+        results: lobby.players.map((player) => ({
+          id: player.id,
+          correct: null,
+        })),
         correctAnswer: cars[Math.floor(Math.random() * cars.length)],
         options: cars,
       }),
@@ -99,7 +104,10 @@ const Lobby = () => {
         currentRound: lobby.currentRound + 1,
         rounds: arrayUnion({
           number: lobby.currentRound + 1,
-          results: lobby.players.map((player) => ({ id: player.id, correct: null })),
+          results: lobby.players.map((player) => ({
+            id: player.id,
+            correct: null,
+          })),
           correctAnswer: cars[Math.floor(Math.random() * cars.length)],
           options: cars,
         }),
@@ -115,80 +123,91 @@ const Lobby = () => {
     return findCurrentRound()?.results?.find((result) => result.id === playerId)?.correct !== null;
   };
 
+  const copyLobbyCode = () => {
+    navigator.clipboard.writeText(lobby.code);
+    toast.success("Lobby code copied to clipboard!");
+  };
+
   return (
     lobby && (
-      <div className={classes.container}>
+      <div className={classes.root}>
         <Link className={classes.header} to={rc.default}>
           Kartick
         </Link>
-        <header className={classes.header}>
-          <h1>Game Lobby</h1>
-          <div className={classes.lobbyInfo}>
-            <p>
-              Lobby Code: <span>{lobby.code}</span>
-            </p>
-            <p>
-              Current Player: <span>{lobby.players.find(({ id }) => id === playerId)?.name}</span>
-            </p>
-            <p>
-              Host: <span>{lobby.players.find(({ isHost }) => isHost)?.name}</span>
-            </p>
-          </div>
-        </header>
 
-        <section className={classes.playersSection}>
-          <h2>Players</h2>
-          <ul className={classes.playerList}>
-            {lobby.players.map((player) => (
-              <li key={player.id} className={classes.playerItem}>
-                {player.name}: {player.score}
-              </li>
-            ))}
-          </ul>
-        </section>
+        <div className={classes.container}>
+          <header className={classes.main}>
+            <h1>Game Lobby</h1>
+            <div className={classes.lobbyInfo}>
+              <p>
+                Lobby Code:{" "}
+                <span className={classes.lobbyCode} onClick={copyLobbyCode}>
+                  {lobby.code}
+                </span>
+              </p>
+              <p>
+                Current Player: <span>{lobby.players.find(({ id }) => id === playerId)?.name}</span>
+              </p>
+              <p>
+                Host: <span>{lobby.players.find(({ isHost }) => isHost)?.name}</span>
+              </p>
+            </div>
+          </header>
 
-        <section className={classes.gameSection}>
-          {gameStarted ? (
-            <p className={classes.roundInfo}>Round: {lobby?.currentRound}</p>
-          ) : lobby.players.find(({ isHost }) => isHost).id === playerId ? (
-            lobby.players.length > 1 ? (
-              <button className={classes.startButton} onClick={startGame}>
-                Start Game
-              </button>
+          <section className={classes.playersSection}>
+            <h2>Players</h2>
+            <ul className={classes.playerList}>
+              {lobby.players.map((player) => (
+                <li key={player.id} className={classes.playerItem}>
+                  {player.name}: {player.score}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className={classes.gameSection}>
+            {gameStarted ? (
+              <p className={classes.roundInfo}>Round: {lobby?.currentRound}</p>
+            ) : lobby.players.find(({ isHost }) => isHost).id === playerId ? (
+              lobby.players.length > 1 ? (
+                <button className={classes.startButton} onClick={startGame}>
+                  Start Game
+                </button>
+              ) : (
+                <p className={classes.waitMessage}>Waiting for more players</p>
+              )
             ) : (
-              <p className={classes.waitMessage}>Waiting for more players</p>
-            )
-          ) : (
-            <p className={classes.waitMessage}>Waiting for host to start the game</p>
-          )}
+              <p className={classes.waitMessage}>Waiting for host to start the game</p>
+            )}
 
-          {gameStarted && !hasPlayerGuessed() && (
-            <div className={classes.guessSection}>
-              <h3>Which one is `{findCurrentRound().correctAnswer.name}`</h3>
-              <div className={classes.carsContainer}>
-                {findCurrentRound()?.options.map((car, i) => (
-                  <div key={i} className={classes.carOption} onClick={() => guess(car.name)}>
-                    <img src={car.image} alt={car.name} className={classes.carImage} />
-                  </div>
-                ))}
+            {gameStarted && !hasPlayerGuessed() && (
+              <div className={classes.guessSection}>
+                <h3>Which one is `{findCurrentRound().correctAnswer.name}`</h3>
+                <div className={classes.carsContainer}>
+                  {findCurrentRound()?.options.map((car, i) => (
+                    <div key={i} className={classes.carOption} onClick={() => guess(car.name)}>
+                      <img src={car.image} alt={car.name} className={classes.carImage} />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {lobby.currentRound > 1 && (
-            <div className={classes.correctAnswer}>
-              The correct answer for previous round was:
-              <br />
-              <img
-                src={
-                  lobby.rounds.find(({ number }) => number === lobby.currentRound - 1)?.correctAnswer?.image
-                }
-                className={classes.carImage}
-                alt="car"
-              />
-            </div>
-          )}
-        </section>
+            {lobby.currentRound > 1 && (
+              <div className={classes.correctAnswer}>
+                The correct answer for previous round was:
+                <br />
+                <img
+                  src={
+                    lobby.rounds.find(({ number }) => number === lobby.currentRound - 1)?.correctAnswer?.image
+                  }
+                  className={classes.carImage}
+                  alt="car"
+                />
+              </div>
+            )}
+          </section>
+        </div>
       </div>
     )
   );

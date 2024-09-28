@@ -20,7 +20,6 @@ const Create = () => {
 
     const lobbyRef = await addDoc(lobbiesCollection, {
       startedAt: new Date(),
-      active: true,
       round: { number: 0, active: false }, // game has not started yet?
       players: [
         {
@@ -28,9 +27,11 @@ const Create = () => {
           name: playerName,
           score: 0,
           isHost: true,
+          currentTurn: true,
         },
       ],
       code: Math.random().toString(36).substring(2, 8),
+      rounds: [],
     });
 
     setPlayerName("");

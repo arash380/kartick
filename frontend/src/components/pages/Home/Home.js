@@ -1,57 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { onSnapshot } from "firebase/firestore";
-import noImage from "../../../assets/images/noImage.png";
-import { playersCollection } from "../../../firebase/firebase";
+import React from "react";
+import f1car from "../../../assets/images/f1-car.png";
 import classes from "./Home.module.css";
-// import { Button } from "@mui/material";
 
 const Home = () => {
-  const [players, setPlayers] = useState();
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(playersCollection, (snapshot) => {
-      let data = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      data.sort((a, b) => a.name.localeCompare(b.name));
-      data = data.map((player) => (player.img === "" ? { ...player, img: noImage } : player));
-      setPlayers(data);
-    });
-
-    return () => {
-      setPlayers([]);
-      unsubscribe();
-    };
-  }, []);
-
-  // const onPlayerClick = (index) => {
-  //   const newPlayers = [...players];
-  //   newPlayers[index].isSelected = !newPlayers[index].isSelected;
-
-  //   setPlayers(newPlayers);
-  // };
-
-  return players ? (
+  return (
     <div className={classes.root}>
-      <h2>Oiii</h2>
-      <div className={classes.players}>
-        {players.map((player, i) => (
-          <div
-            key={i}
-            // onClick={() => onPlayerClick(i)}
-            className={`${classes.player} ${player.isSelected && classes.isPlayerSelected}`}
-          >
-            <img src={player.img} alt={player.name} />
-            <p>{player.name}</p>
-          </div>
-        ))}
-      </div>
-      {/* <Button className={classes.btn} onClick={startGame}>
-        Start Game
-      </Button> */}
+      <img src={f1car} alt="car"/>
+      <h1>Kartick.io</h1>
+      <button>Create</button>
+      <button>Join</button>
     </div>
-  ) : (
-    // <AppLoader />
-    <div>Loading...</div>
-  );
+  )
 };
 
 export default Home;

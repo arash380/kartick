@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import classes from "./Create.module.css";
+import logo from "../../../assets/images/logo.png";
 import { addDoc } from "firebase/firestore";
 import { lobbiesCollection } from "../../../firebase/firebase";
-import logo from "../../../assets/images/logo.png";
 
 const Create = () => {
   const [playerName, setPlayerName] = useState("");
@@ -25,9 +25,9 @@ const Create = () => {
 
   return (
     <div className={classes.centered}>
-      <form onSubmit={onCreate}>
-        <img src={logo} alt="Logo" className={classes.logo} />
+      <img src={logo} alt="Logo" className={classes.logo} />
 
+      <form onSubmit={onCreate}>
         <label htmlFor="playerName">Player Name</label>
         <input
           type="text"

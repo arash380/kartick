@@ -1,32 +1,37 @@
 .centered {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100vh;
-  gap: 10px;
+  text-align: center;
+  padding: 20px;
 }
 
-label {
-  font-size: 16px;
-  margin-bottom: 5px;
+.logo {
+  width: 40vh;
+  max-width: 300px;
+  margin-bottom: 15px;
 }
 
 input,
 button {
-  width: 200px;
+  width: 100%;
+  max-width: 300px;
   padding: 10px;
   font-size: 16px;
+  margin-bottom: 15px;
 }
 
 input {
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-bottom: 10px;
+  transition: border-color 0.3s;
 }
 
 input:focus {
   border-color: #007bff;
+  outline: none;
 }
 
 button {
@@ -35,9 +40,19 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3;
 }
 
 button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+label {
+  margin-top: 2rem;
+  font-size: 16px;
 }

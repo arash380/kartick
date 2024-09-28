@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import classes from "./Join.module.css";
+import logo from "../../../assets/images/logo.png";
 
 const Join = () => {
   const [roomLobby, setRoomLobby] = useState("");
@@ -9,6 +10,8 @@ const Join = () => {
 
   return (
     <div className={classes.centered}>
+      <img src={logo} alt="Logo" className={classes.logo} />
+
       <label htmlFor="roomLobby">Room Lobby</label>
       <input
         type="text"

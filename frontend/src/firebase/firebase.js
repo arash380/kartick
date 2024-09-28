@@ -13,5 +13,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const playersCollection = collection(db, "players");
+const lobbiesCollection = collection(db, "lobbies");
 
-export { playersCollection };
+export { playersCollection, lobbiesCollection };

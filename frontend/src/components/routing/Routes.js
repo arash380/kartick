@@ -3,14 +3,16 @@ import { BrowserRouter as Router, Navigate, Route, Routes as Switch } from "reac
 import MainLayout from "./Layouts/MainLayout/MainLayout";
 import Home from "../pages/Home/Home";
 import rc from "./routeConfigs";
+import Join from "../pages/Join/Join";
 
-const { default: defaultRoute, wildCard } = rc;
+const { default: defaultRoute, wildCard, join } = rc;
 
 const Routes = () => (
   <Router>
     <Switch>
       <Route element={<MainLayout />}>
         <Route path={defaultRoute} element={<Home />} />
+        <Route path={join} element={<Join />} />
         <Route path={wildCard} element={<Navigate to={defaultRoute} />} />
       </Route>
     </Switch>

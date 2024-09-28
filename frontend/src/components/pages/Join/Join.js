@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import classes from "./Join.module.css";
 import { useNavigate } from "react-router-dom";
 import rc from "../../routing/routeConfigs";
-
 import logo from "../../../assets/images/logo.png";
-import { useNavigate } from "react-router-dom";
 import { addDoc, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
 import { toast } from "react-toastify";

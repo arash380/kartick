@@ -42,51 +42,53 @@ const Lobby = () => {
   }, [playerId, navigate]);
 
   const startGame = async () => {
-    const cars = await getRandomCars(2, 2022, true);
+    const cars = await getRandomCars(5, 2022, true);
 
     updateDoc(doc(lobbiesCollection, lobbyId), {
       currentRound: 1,
-      rounds: lobby.rounds.push({
-        number: 1,
-
-        playerGuseses: lobby.players.map((player) => ({ id: player.id, guess: null })),
-
-        correctAnswer: cars[Math.floor(Math.random() * cars.length)],
-        options: cars,
-      }),
+      rounds: [
+        ...lobby.rounds,
+        {
+          number: 1,
+          guesses: lobby.players.map((player) => ({ id: player.id, guess: null })),
+          correctAnswer: cars[Math.floor(Math.random() * cars.length)],
+          options: cars,
+        },
+      ],
     });
   };
 
-  const guess = async () => {
-    // updateDoc(doc(lobbiesCollection, lobbyId), {
-    //   rounds: lobby.rounds.map((round) => {
-    //     if (round.number === lobby.round.number) {
-    //       return {
-    //         ...round,
-    //         playerGuseses: round.playerGuseses.map((guess) => {
-    //           if (guess.id === playerId) {
-    //             return { ...guess, guess: "car" };
-    //           }
-    //           return guess;
-    //         }),
-    //       };
-    //     }
-    //     return round;
-    //   }),
-    // });
+  const guess = async (name) => {
+    updateDoc(doc(lobbiesCollection, lobbyId), {
+      rounds: lobby.rounds.map((round) => {
+        if (round.number === lobby.currentRound) {
+          return {
+            ...round,
+            guesses: round.guesses.map((guess) => {
+              if (guess.id === playerId) {
+                return { ...guess, guess: name };
+              }
+              return guess;
+            }),
+          };
+        }
+        return round;
+      }),
+    });
+
     // // todo: check if all players have guessed
-    // const everyoneGussed = lobby.rounds.find((round) => round.number === lobby.round.number).playerGuseses.every((guess) => guess.guess);
+    // const everyoneGussed = lobby.rounds.find((round) => round.number === lobby.round.number).guesses.every((guess) => guess.guess);
     // if (everyoneGussed) {
     //   //
     // }
   };
 
   const findCurrentRound = () => {
-    return lobby.rounds.find((round) => round.number === lobby.currentRound);
+    return lobby?.rounds?.find((round) => round.number === lobby?.currentRound);
   };
 
   const hasPlayerGuessed = () => {
-    return findCurrentRound().playerGuseses.find((guess) => guess.id === playerId).guess;
+    return findCurrentRound()?.guesses?.find((guess) => guess.id === playerId)?.guess;
   };
 
   return (
@@ -94,7 +96,7 @@ const Lobby = () => {
       <div className={classes.root}>
         <h1>Lobby</h1>
         {gameStarted ? (
-          <p>Round: {lobby?.round?.number}</p>
+          <p>Round: {lobby?.currentRound}</p>
         ) : lobby.players.find(({ isHost }) => isHost).id === playerId ? (
           <button onClick={startGame}>Start Game</button>
         ) : (
@@ -112,7 +114,18 @@ const Lobby = () => {
         <p>Host player: {lobby.players.find(({ isHost }) => isHost)?.name}</p>
         <p>Lobby Code: {lobby.code}</p>
 
-        {gameStarted && !hasPlayerGuessed && <button onClick={guess}>Choose your car</button>}
+        {gameStarted && !hasPlayerGuessed() && (
+          <>
+            <h3>Guess</h3>
+            <div>
+              {findCurrentRound()?.options.map((car, i) => (
+                <div key={i} onClick={() => guess(car.name)}>
+                  <img src={car.image} alt="car" />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
         {lobby.currentRound > 1 && (
           <div>

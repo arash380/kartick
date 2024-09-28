@@ -21,7 +21,7 @@ const Create = () => {
 
     const lobbyRef = await addDoc(lobbiesCollection, {
       startedAt: new Date(),
-      currentRoad: 0,
+      currentRound: 0,
       players: [
         {
           id: playerRef.id,

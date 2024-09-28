@@ -42,7 +42,13 @@ const Join = () => {
     });
 
     updateDoc(doc(lobbiesCollection, lobby.id), {
-      players: arrayUnion({ id: playerRef.id, name: playerName, score: 0, isHost: false }),
+      players: arrayUnion({
+        id: playerRef.id,
+        name: playerName,
+        score: 0,
+        isHost: false,
+        currentTurn: false,
+      }),
     });
 
     setPlayerName("");

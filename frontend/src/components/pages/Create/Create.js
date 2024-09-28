@@ -4,7 +4,7 @@ import logo from "../../../assets/images/logo.png";
 import { addDoc } from "firebase/firestore";
 import rc from "../../routing/routeConfigs";
 import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Create = () => {
   const [playerName, setPlayerName] = useState("");
@@ -41,9 +41,9 @@ const Create = () => {
 
   return (
     <div className={classes.roots}>
-      <a className={classes.header} onClick={() => navigate(rc.default)}>
-        Kartick.io
-      </a>
+      <Link className={classes.header} to={rc.default}>
+        Kartick
+      </Link>
       <div className={classes.centered}>
         <img src={logo} alt="Logo" className={classes.logo} />
 

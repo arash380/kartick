@@ -1,7 +1,7 @@
 import React from "react";
 import car from "../../../assets/images/logo.png";
 import classes from "./Home.module.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import rc from "../../routing/routeConfigs";
 
 const Home = () => {
@@ -9,11 +9,11 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
-      <a className={classes.header} onClick={() => navigate(rc.default)}>Kartick.io</a>
+      <Link className={classes.header} to={rc.default}>Kartick</Link>
       <div className={classes.centered}>
         <img src={car} alt="car" className={classes.logo}/>
-        <button onClick={() => navigate(rc.create)}>Create</button>
-        <button onClick={() => navigate(rc.join)}>Join</button>
+        <button className={classes.button} onClick={() => navigate(rc.create)}>Create</button>
+        <button className={classes.button} onClick={() => navigate(rc.join)}>Join</button>
       </div>
     </div>
   ) 

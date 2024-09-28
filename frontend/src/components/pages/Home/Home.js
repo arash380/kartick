@@ -31,7 +31,7 @@ const Home = () => {
 
   return players ? (
     <div className={classes.root}>
-      <h2>Who's playing?</h2>
+      <h2>Oiii</h2>
       <div className={classes.players}>
         {players.map((player, i) => (
           <div

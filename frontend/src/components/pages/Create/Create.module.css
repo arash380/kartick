@@ -5,7 +5,7 @@
   justify-content: center;
   height: 100vh;
   text-align: center;
-  padding: 20px; /* Added padding for better spacing */
+  padding: 20px;
 }
 
 .logo {
@@ -16,22 +16,22 @@
 
 input,
 button {
-  width: 100%; /* Made inputs and buttons take full width */
-  max-width: 300px; /* Set a max-width for better layout */
+  width: 100%;
+  max-width: 300px;
   padding: 10px;
   font-size: 16px;
-  margin-bottom: 15px; /* Added consistent spacing between elements */
+  margin-bottom: 15px;
 }
 
 input {
   border: 1px solid #ccc;
   border-radius: 4px;
-  transition: border-color 0.3s; /* Smooth transition for focus state */
+  transition: border-color 0.3s;
 }
 
 input:focus {
   border-color: #007bff;
-  outline: none; /* Remove default outline */
+  outline: none;
 }
 
 button {
@@ -40,11 +40,11 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s; /* Smooth transition for hover */
+  transition: background-color 0.3s;
 }
 
 button:hover:not(:disabled) {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
 
 button:disabled {
@@ -54,4 +54,5 @@ button:disabled {
 
 label {
   margin-top: 2rem;
+  font-size: 16px;
 }

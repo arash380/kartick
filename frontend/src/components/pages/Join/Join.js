@@ -1,35 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "./Join.module.css";
 import logo from "../../../assets/images/logo.png";
+import { useNavigate } from "react-router-dom";
+import { addDoc, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { lobbiesCollection, playersCollection } from "../../../firebase/firebase";
+import { toast } from "react-toastify";
 
 const Join = () => {
-  const [roomLobby, setRoomLobby] = useState("");
+  const [lobbyCode, setLobbyCode] = useState("");
   const [playerName, setPlayerName] = useState("");
+  const [lobbies, setLobbies] = useState([]);
+  const navigate = useNavigate();
 
-  const isJoinDisabled = roomLobby.trim() === "" || playerName.trim() === "";
+  const isJoinDisabled = lobbyCode.trim() === "" || playerName.trim() === "";
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(lobbiesCollection, (snapshot) => {
+      let data = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setLobbies(data);
+    });
+
+    return () => {
+      setLobbies({});
+      unsubscribe();
+    };
+  }, []);
+
+  const onJoin = async (event) => {
+    event.preventDefault();
+
+    const lobby = lobbies.find((lobby) => lobby.code === lobbyCode);
+
+    if (!lobby) {
+      toast.error("Lobby not found!");
+      return;
+    }
+
+    const playerRef = await addDoc(playersCollection, {
+      name: playerName,
+    });
+
+    updateDoc(doc(lobbiesCollection, lobby.id), {
+      players: arrayUnion({ id: playerRef.id, name: playerName, score: 0, isHost: false }),
+    });
+
+    setPlayerName("");
+    setLobbyCode("");
+
+    navigate(`/lobby/${lobby.id}/player/${playerRef.id}`);
+  };
 
   return (
-    <div className={classes.centered}>
-      <img src={logo} alt="Logo" className={classes.logo} />
+    lobbies && (
+      <div className={classes.centered}>
+        <img src={logo} alt="Logo" className={classes.logo} />
 
-      <label htmlFor="roomLobby">Room Lobby</label>
-      <input
-        type="text"
-        id="roomLobby"
-        value={roomLobby}
-        onChange={(e) => setRoomLobby(e.target.value)}
-      />
+        <form onSubmit={onJoin}>
+          <label htmlFor="lobbyCode">Lobby Code</label>
+          <input
+            type="text"
+            id="lobbyCode"
+            value={lobbyCode}
+            onChange={(e) => setLobbyCode(e.target.value)}
+          />
 
-      <label htmlFor="playerName">Player Name</label>
-      <input
-        type="text"
-        id="playerName"
-        value={playerName}
-        onChange={(e) => setPlayerName(e.target.value)}
-      />
+          <label htmlFor="playerName">Player Name</label>
+          <input
+            type="text"
+            id="playerName"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+          />
 
-      <button disabled={isJoinDisabled}>Join Lobby</button>
-    </div>
+          <button disabled={isJoinDisabled} type="submit">
+            Join Lobby
+          </button>
+        </form>
+      </div>
+    )
   );
 };
 

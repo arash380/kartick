@@ -1,0 +1,7 @@
+.content {
+  position: absolute;
+  /* top: var(--top-menu-height); */
+  /* left: calc(var(--taken-space-by-menu) + 10px); */
+  /* width: calc(100vw - var(--taken-space-by-menu) - 30px); */
+  width: 100vw;
+}

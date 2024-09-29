@@ -3,7 +3,8 @@ import classes from "./Results.module.css";
 import { doc, onSnapshot } from "firebase/firestore";
 import { lobbiesCollection } from "../../../firebase/firebase";
 import rc from "../../routing/routeConfigs";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
+
 import {
   LineChart,
   Line,
@@ -83,6 +84,9 @@ const Results = () => {
 
   return (
     <div className={classes.root}>
+      <Link className={classes.header} to={rc.default}>
+        Kartick
+      </Link>
       <h1 className={classes.title}>Game Over!</h1>
       <h2 className={classes.subtitle}>Final Results</h2>
 

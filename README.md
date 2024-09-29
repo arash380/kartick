@@ -1,8 +1,8 @@
-# Getting Started with Create React App
+# Both backend and frontend are hosted
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You can play this game [here](https://kartick-2f62e.web.app/).
 
-## Available Scripts
+## Available Scripts under the frontend folder
 
 In the project directory, you can run:
 

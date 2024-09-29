@@ -4,15 +4,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { lobbiesCollection } from "../../../firebase/firebase";
 import rc from "../../routing/routeConfigs";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 
 const Results = () => {
   const { lobbyId } = useParams();
@@ -43,10 +35,8 @@ const Results = () => {
     let totalScore = 0;
     return {
       name: player.name,
-      scores: lobby.rounds.map((round, roundIndex) => {
-        const playerResult = round.results.find(
-          (result) => result.id === player.id
-        );
+      scores: lobby.rounds.map((round) => {
+        const playerResult = round.results.find((result) => result.id === player.id);
         if (playerResult && playerResult.correct) {
           totalScore += 1;
         }
@@ -93,15 +83,10 @@ const Results = () => {
             className={classes.playerResult}
             style={{ borderColor: colors[index % colors.length] }}
           >
-            <span
-              className={classes.playerName}
-              style={{ color: colors[index % colors.length] }}
-            >
+            <span className={classes.playerName} style={{ color: colors[index % colors.length] }}>
               {player.name}:
             </span>
-            <span className={classes.playerScore}>
-              {player.scores[player.scores.length - 1]} points
-            </span>
+            <span className={classes.playerScore}>{player.scores[player.scores.length - 1]} points</span>
           </div>
         ))}
       </div>

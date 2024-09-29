@@ -9,14 +9,20 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
-      <Link className={classes.header} to={rc.default}>Kartick</Link>
+      <Link className={classes.header} to={rc.default}>
+        Kartick
+      </Link>
       <div className={classes.centered}>
-        <img src={car} alt="car" className={classes.logo}/>
-        <button className={classes.button} onClick={() => navigate(rc.create)}>Create</button>
-        <button className={classes.button} onClick={() => navigate(rc.join)}>Join</button>
+        <img src={car} alt="car" className={classes.logo} />
+        <button className={classes.button} onClick={() => navigate(rc.create)}>
+          Create
+        </button>
+        <button className={classes.button} onClick={() => navigate(rc.join)}>
+          Join
+        </button>
       </div>
     </div>
-  ) 
+  );
 };
 
 export default Home;

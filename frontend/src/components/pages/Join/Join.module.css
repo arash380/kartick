@@ -1,62 +1,93 @@
-.centered {
+.root {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
+  background-color: #f9f9f9;
+  font-family: "Arial", sans-serif;
+  padding: 20px;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+  width: 100%;
 }
 
 .logo {
-  width: 40vh;
-  max-width: 300px;
-  margin-bottom: 15px;
-}
-label {
-  font-size: 16px;
-  margin-bottom: 5px;
+  width: 30vh;
+  max-width: 200px;
+  margin-bottom: 20px;
 }
 
-input,
-button {
-  font-size: 16px;
-}
-
-.input {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px;
-}
-
-input:focus {
-  border-color: #007bff;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 5px;
-}
-
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-.header {
-  display: flex;
-  justify-content: left;
+.form {
   width: 100%;
-  text-align: center;
-  font-weight: 1000;
-  font-size: 20px;
-  margin: 10px;
-  cursor: pointer;
-  text-decoration: none;
-  color: black;
+  max-width: 350px;
 }
 
 .inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   width: 100%;
+  margin: 10px 0;
+}
+
+.label {
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.input {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+.input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #000;
+}
+
+.header:hover {
+  text-decoration: underline;
 }

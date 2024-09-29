@@ -17,12 +17,11 @@ const Join = () => {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(lobbiesCollection, (snapshot) => {
-      let data = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      const data = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setLobbies(data);
     });
 
     return () => {
-      setLobbies({});
       unsubscribe();
     };
   }, []);
@@ -70,28 +69,38 @@ const Join = () => {
         <div className={classes.centered}>
           <img src={logo} alt="Logo" className={classes.logo} />
 
-          <form onSubmit={onJoin}>
+          <form onSubmit={onJoin} className={classes.form}>
             <div className={classes.inputContainer}>
-              <label htmlFor="lobbyCode">Lobby Code</label>
+              <label htmlFor="lobbyCode" className={classes.label}>
+                Lobby Code
+              </label>
               <input
                 type="text"
                 id="lobbyCode"
                 value={lobbyCode}
+                className={classes.input}
                 onChange={(e) => setLobbyCode(e.target.value)}
               />
             </div>
 
-            <div className="inputContainer">
-              <label htmlFor="playerName">Player Name</label>
+            <div className={classes.inputContainer}>
+              <label htmlFor="playerName" className={classes.label}>
+                Player Name
+              </label>
               <input
                 type="text"
                 id="playerName"
                 value={playerName}
+                className={classes.input}
                 onChange={(e) => setPlayerName(e.target.value)}
               />
             </div>
 
-            <button disabled={isJoinDisabled} type="submit">
+            <button
+              disabled={isJoinDisabled}
+              className={classes.button}
+              type="submit"
+            >
               Join Lobby
             </button>
           </form>

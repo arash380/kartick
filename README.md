@@ -1,4 +1,4 @@
-# Both backend and frontend are hosted
+# NOTE: Both backend and frontend servers are hosted.
 
 You can play this game [here](https://kartick-2f62e.web.app/).
 

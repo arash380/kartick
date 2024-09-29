@@ -8,6 +8,8 @@ import { getRandomCars } from "../../../services/api/cars";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const NUM_OF_CARS = 7;
+
 const Lobby = () => {
   const { lobbyId, playerId } = useParams();
   const navigate = useNavigate();
@@ -23,6 +25,10 @@ const Lobby = () => {
 
         if (!doc.exists()) {
           navigate(rc.default);
+        }
+
+        if (doc.data().gameOver) {
+          navigate(`/lobby/${lobbyId}/results`);
         }
       });
     }
@@ -44,7 +50,7 @@ const Lobby = () => {
   }, [playerId, navigate]);
 
   const startGame = async () => {
-    const cars = await getRandomCars(5);
+    const cars = await getRandomCars(NUM_OF_CARS);
 
     await updateDoc(doc(lobbiesCollection, lobbyId), {
       currentRound: 1,
@@ -98,7 +104,16 @@ const Lobby = () => {
         players: updatedPlayers,
       });
 
-      const cars = await getRandomCars(5);
+      if (lobby.currentRound === 3) {
+        await updateDoc(doc(lobbiesCollection, lobbyId), {
+          gameOver: true,
+        });
+
+        navigate(`/lobby/${lobbyId}/results`);
+        return;
+      }
+
+      const cars = await getRandomCars(NUM_OF_CARS);
 
       await updateDoc(doc(lobbiesCollection, lobbyId), {
         currentRound: lobby.currentRound + 1,
@@ -193,9 +208,12 @@ const Lobby = () => {
               </div>
             )}
 
+            {gameStarted && hasPlayerGuessed() && <p>Waiting for other players!</p>}
+
             {lobby.currentRound > 1 && (
               <div className={classes.correctAnswer}>
-                The correct answer for previous round was:
+                <br />
+                The correct answer for round #{lobby.currentRound - 1} was:
                 <br />
                 <img
                   src={
@@ -204,6 +222,10 @@ const Lobby = () => {
                   className={classes.carImage}
                   alt="car"
                 />
+                <br />
+                <span>
+                  {lobby.rounds.find(({ number }) => number === lobby.currentRound - 1)?.correctAnswer?.name}
+                </span>
               </div>
             )}
           </section>

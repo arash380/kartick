@@ -4,6 +4,7 @@ const rc = Object.freeze({
   join: "/join",
   create: "/create",
   lobby: "/lobby/:lobbyId/player/:playerId",
+  results: "/lobby/:lobbyId/results",
 });
 
 export default rc;

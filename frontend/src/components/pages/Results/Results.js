@@ -73,6 +73,7 @@ const Results = () => {
 
   return (
     <div className={classes.root}>
+      <h1>Test</h1>
       <h1 className={classes.title}>Game Over!</h1>
       <h2 className={classes.subtitle}>Final Results</h2>
 

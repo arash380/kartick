@@ -44,7 +44,7 @@ const Results = () => {
     let totalScore = 0;
     return {
       name: player.name,
-      scores: lobby.rounds.map((round, roundIndex) => {
+      scores: lobby.rounds.map((round) => {
         const playerResult = round.results.find(
           (result) => result.id === player.id
         );
